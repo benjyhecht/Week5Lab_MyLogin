@@ -23,8 +23,15 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
+        
+        if (request.getParameter("logout") != null) {
+            session.invalidate();
+            session = request.getSession();
+            String message = "Successfully logged out";
+            request.setAttribute("message", message);
+        }
         if (user != null) {
-            getServletContext().getRequestDispatcher("/home").forward(request, response);
+            response.sendRedirect("home");
         } else {
             getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
         }
@@ -48,7 +55,7 @@ public class LoginServlet extends HttpServlet {
         session.setAttribute("user", user);
 
         if (user != null) {
-            getServletContext().getRequestDispatcher("/home").forward(request, response);
+            response.sendRedirect("home");
         } else {
             String message = "Invalid credentials";
             request.setAttribute("message", message);

@@ -23,20 +23,12 @@ public class HomeServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
 
-        if (request.getParameter("logout") != null) {
-            session.invalidate();
-            session = request.getSession();
-            String message = "Successfully logged out";
-            request.setAttribute("message", message);
-            getServletContext().getRequestDispatcher("/login").forward(request, response);
-        }
-
         User user = (User) session.getAttribute("user");
         if (user != null) {
             request.setAttribute("username",user.getUsername());
             getServletContext().getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
         } else {
-            getServletContext().getRequestDispatcher("/login").forward(request, response);
+            response.sendRedirect("login");
         }
     }
 
